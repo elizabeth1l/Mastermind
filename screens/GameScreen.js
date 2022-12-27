@@ -1,7 +1,18 @@
-import react from "react";
+import react, { useState } from "react";
 import { Text, View, TextInput, StyleSheet } from "react-native";
 
 const GameScreen = () => {
+  const [firstNumber, setFirstNumber] = useState();
+  // const [secondNumber, setSecondNumber] = useState();
+  const onChangeLimit = (num) => {
+    if (num < 8) {
+      setFirstNumber(num);
+    } else {
+      alert("Invalid input, please enter a number between 0 and 7");
+      setFirstNumber("");
+    }
+  };
+
   return (
     <View>
       <View style={styles.oneAttemptRow}>
@@ -10,6 +21,7 @@ const GameScreen = () => {
           keyboardType="numeric"
           maxLength={1}
           onChangeText={onChangeLimit}
+          value={firstNumber}
         />
         <TextInput
           style={styles.input}
