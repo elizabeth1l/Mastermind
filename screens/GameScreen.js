@@ -5,10 +5,25 @@ const GameScreen = () => {
   return (
     <View>
       <View style={styles.oneAttemptRow}>
-        <TextInput style={styles.input} keyboardType="numberspad" />
-        <TextInput style={styles.input} keyboardType="numeric" />
-        <TextInput style={styles.input} keyboardType="numeric" />
-        <TextInput style={styles.input} keyboardType="numeric" />
+        <TextInput
+          style={styles.input}
+          keyboardType="numeric"
+          maxLength={1}
+          onChangeText={onChangeLimit}
+        />
+        <TextInput
+          style={styles.input}
+          keyboardType="numeric"
+          maxLength={1}
+          onChangeText={onChangeLimit}
+        />
+        <TextInput
+          style={styles.input}
+          keyboardType="numeric"
+          maxLength={1}
+          onChangeText={onChangeLimit}
+        />
+        <TextInput style={styles.input} keyboardType="numeric" maxLength={1} />
       </View>
     </View>
   );
