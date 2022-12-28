@@ -22,7 +22,7 @@ const TabNavigator = ({ route }) => (
       children={() => <HomeScreen username={route.params.username} />}
       options={{
         tabBarIcon: () => (
-          <MaterialCommunityIcons name="home" color="#5A4AE3" size={30} />
+          <MaterialCommunityIcons name="home" color="#6EB0AE" size={30} />
         ),
       }}
     />
@@ -33,7 +33,7 @@ const TabNavigator = ({ route }) => (
         tabBarIcon: () => (
           <MaterialCommunityIcons
             name="gamepad-variant"
-            color="#5A4AE3"
+            color="#6EB0AE"
             size={30}
           />
         ),
