@@ -11,12 +11,36 @@ const GameScreen = () => {
   const [fourthNumber, setFourthNumber] = useState();
   const [randomNumber, setRandomNumber] = useState();
 
+  const getNumber = async () => {
+    try {
+      const response = await fetch(
+        "https://www.random.org/integers/?num=4&min=0&max=7&col=1&base=10&format=plain&rnd=new"
+      ).then((response) => {
+        return response.text();
+      });
+      console.log(response);
+      setRandomNumber(response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const onChangeLimit = (num, func) => {
     if (num < 8) {
       func(num);
     } else {
       alert("Invalid input, please enter a number between 0 and 7");
+      func("");
     }
+  };
+
+  const checkRightNumbers = () => {
+    let rightNumbers = 0;
+    randomNumber.includes(firstNumber) ? rightNumbers++ : rightNumbers;
+    randomNumber.includes(secondNumber) ? rightNumbers++ : rightNumbers;
+    randomNumber.includes(thirdNumber) ? rightNumbers++ : rightNumbers;
+    randomNumber.includes(fourthNumber) ? rightNumbers++ : rightNumbers;
+    console.log(rightNumbers);
   };
 
   const onClick = () => {
@@ -27,7 +51,8 @@ const GameScreen = () => {
         firstNumber.toString() +
         secondNumber.toString() +
         thirdNumber.toString() +
-        fourthNumber.toString())
+        fourthNumber.toString() +
+        "\n")
     );
     setFirstNumber();
     setSecondNumber();
@@ -41,25 +66,19 @@ const GameScreen = () => {
     }
     if (row > 1) {
       return (
-        <View>
-          <Text> Past Guesses:</Text>
-          <Text>{guesses}</Text>
+        <View style={styles.chart}>
+          <View style={styles.leftChart}>
+            <Text> Past Guesses</Text>
+            <Text>{guesses}</Text>
+          </View>
+          <View style={styles.rightChart}>
+            <Text>Right Place </Text>
+
+            <Text>Right Number</Text>
+            <Text>{checkRightNumbers()}</Text>
+          </View>
         </View>
       );
-    }
-  };
-
-  const getNumber = async () => {
-    try {
-      const response = await fetch(
-        "https://www.random.org/integers/?num=4&min=0&max=7&col=1&base=10&format=plain&rnd=new"
-      ).then((response) => {
-        return response.text();
-      });
-      console.log(response);
-      setRandomNumber(response);
-    } catch (error) {
-      console.error(error);
     }
   };
 
@@ -102,6 +121,7 @@ const GameScreen = () => {
         </View>
         <Button style={styles.button} title="Go" onPress={onClick} />
       </View>
+
       <View>{showGuesses()}</View>
     </View>
   );
@@ -130,5 +150,21 @@ const styles = StyleSheet.create({
     paddingTop: 100,
     flexDirection: "row",
   },
-  guesses: {},
+  chart: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    backgroundColor: "white",
+    margin: 30,
+    padding: 20,
+    borderRadius: 10,
+  },
+  leftChart: {
+    // flexDirection: "column",
+    alignItems: "center",
+    // justifyContent: "center",
+  },
+  rightChart: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
 });
