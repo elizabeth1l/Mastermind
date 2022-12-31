@@ -14,17 +14,27 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { auth } from "../firebase";
+import { auth, db } from "../firebase";
+import { ref, set } from "firebase/database";
 
 const LoginScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const username = email.slice(0, email.indexOf("@"));
+
+  const initUserData = () => {
+    set(ref(db, "users/" + username.toLowerCase()), {
+      email: email,
+      points: 0,
+    });
+  };
 
   const signUpUser = () => {
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
         console.log("Signed up with email:", user.email);
+        initUserData(user);
       })
       .catch((error) => {
         alert(error.message);

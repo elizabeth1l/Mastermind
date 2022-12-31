@@ -1,18 +1,21 @@
-import react, { useState } from "react";
+import { get } from "firebase/database";
+import react, { useState, useEffect } from "react";
 import {
   Text,
   View,
   TextInput,
   StyleSheet,
   TouchableOpacity,
+  Button,
 } from "react-native";
 
-const OneAttemptRow = () => {
+const GameScreen = () => {
   const [row, setRow] = useState(1);
   const [firstNumber, setFirstNumber] = useState();
   const [secondNumber, setSecondNumber] = useState();
   const [thirdNumber, setThirdNumber] = useState();
   const [fourthNumber, setFourthNumber] = useState();
+  const [randomNumber, setRandomNumber] = useState();
 
   const onChangeLimit = (num, func) => {
     if (num < 8) {
@@ -23,47 +26,73 @@ const OneAttemptRow = () => {
     }
   };
 
-  return (
-    <View style={styles.oneAttemptRow}>
-      <TextInput
-        style={styles.input}
-        keyboardType="numeric"
-        maxLength={1}
-        onChangeText={(num) => onChangeLimit(num, setFirstNumber)}
-        value={firstNumber}
-      />
-      <TextInput
-        style={styles.input}
-        keyboardType="numeric"
-        maxLength={1}
-        onChangeText={(num) => onChangeLimit(num, setSecondNumber)}
-        value={secondNumber}
-      />
-      <TextInput
-        style={styles.input}
-        keyboardType="numeric"
-        maxLength={1}
-        onChangeText={(num) => onChangeLimit(num, setThirdNumber)}
-        value={thirdNumber}
-      />
-      <TextInput
-        style={styles.input}
-        keyboardType="numeric"
-        maxLength={1}
-        onChangeText={(num) => onChangeLimit(num, setFourthNumber)}
-        value={fourthNumber}
-      />
-    </View>
-  );
-};
+  const onClick = () => {
+    return (
+      <View style={styles.guesses}>
+        {firstNumber}
+        {secondNumber}
+        {thirdNumber}
+        {fourthNumber}
+      </View>
+    );
+  };
 
-const GameScreen = () => {
+  const getNumber = async () => {
+    try {
+      const response = await fetch(
+        "https://www.random.org/integers/?num=4&min=0&max=7&col=1&base=10&format=plain&rnd=new"
+      ).then((response) => {
+        return response.text();
+      });
+      console.log(response);
+      setRandomNumber(response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    getNumber();
+  }, []);
+
   return (
-    <View style={styles.row}>
-      <OneAttemptRow />
-      <TouchableOpacity style={styles.button}>
-        <Text>Submit</Text>
-      </TouchableOpacity>
+    <View>
+      <View style={styles.row}>
+        <View style={styles.oneAttemptRow}>
+          <TextInput
+            style={styles.input}
+            keyboardType="numeric"
+            maxLength={1}
+            onChangeText={(num) => onChangeLimit(num, setFirstNumber)}
+            value={firstNumber}
+          />
+          <TextInput
+            style={styles.input}
+            keyboardType="numeric"
+            maxLength={1}
+            onChangeText={(num) => onChangeLimit(num, setSecondNumber)}
+            value={secondNumber}
+          />
+          <TextInput
+            style={styles.input}
+            keyboardType="numeric"
+            maxLength={1}
+            onChangeText={(num) => onChangeLimit(num, setThirdNumber)}
+            value={thirdNumber}
+          />
+          <TextInput
+            style={styles.input}
+            keyboardType="numeric"
+            maxLength={1}
+            onChangeText={(num) => onChangeLimit(num, setFourthNumber)}
+            value={fourthNumber}
+          />
+        </View>
+        <Button style={styles.button} title="Go" onPress={onClick} />
+      </View>
+      {/* <View>
+        <Text>{firstNumber}</Text>
+      </View> */}
     </View>
   );
 };
@@ -79,7 +108,7 @@ const styles = StyleSheet.create({
     padding: 3,
     margin: 10,
     backgroundColor: "white",
-    borderColor: "#5A4AE3",
+    borderColor: "#6EB0AE",
   },
   oneAttemptRow: {
     // paddingTop: 40,
@@ -91,11 +120,7 @@ const styles = StyleSheet.create({
     paddingTop: 100,
     flexDirection: "row",
   },
-  button: {
-    margin: 15,
-    borderWidth: 1,
-    padding: 3,
-    borderRadius: 3,
-    borderColor: " white",
+  guesses: {
+    paddingTop: 100,
   },
 });

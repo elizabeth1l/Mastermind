@@ -4,6 +4,7 @@ import { useNavigation } from "@react-navigation/native";
 import { auth } from "../firebase";
 import { db } from "../firebase";
 import { signOut } from "firebase/auth";
+import { ref, onValue } from "firebase/database";
 
 const HomeScreen = (props) => {
   const [points, setPoints] = useState();
@@ -16,6 +17,18 @@ const HomeScreen = (props) => {
       })
       .catch((error) => alert(error.message));
   };
+
+  const getPointsFromDB = () => {
+    const pointsFromDBRef = ref(db, "users/" + props.username + "/points");
+    onValue(pointsFromDBRef, (snapshot) => {
+      const data = snapshot.val();
+      setPoints(data);
+    });
+  };
+
+  useEffect(() => {
+    getPointsFromDB();
+  }, []);
 
   return (
     <View>
@@ -32,7 +45,7 @@ const HomeScreen = (props) => {
 
       <View style={styles.pointsContainer}>
         <Text style={styles.text}>You currently have</Text>
-        {/* <Text style={styles.number}>{points}</Text> */}
+        <Text style={styles.number}>{points}</Text>
         <Text style={styles.text}>points</Text>
       </View>
     </View>
