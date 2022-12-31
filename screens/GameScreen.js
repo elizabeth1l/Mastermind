@@ -1,16 +1,10 @@
 import { get } from "firebase/database";
 import react, { useState, useEffect } from "react";
-import {
-  Text,
-  View,
-  TextInput,
-  StyleSheet,
-  TouchableOpacity,
-  Button,
-} from "react-native";
+import { Text, View, TextInput, StyleSheet, Button } from "react-native";
 
 const GameScreen = () => {
-  const [row, setRow] = useState(1);
+  let [row, setRow] = useState(1);
+  let [guesses, setGuesses] = useState("");
   const [firstNumber, setFirstNumber] = useState();
   const [secondNumber, setSecondNumber] = useState();
   const [thirdNumber, setThirdNumber] = useState();
@@ -22,19 +16,37 @@ const GameScreen = () => {
       func(num);
     } else {
       alert("Invalid input, please enter a number between 0 and 7");
-      func("");
     }
   };
 
   const onClick = () => {
-    return (
-      <View style={styles.guesses}>
-        {firstNumber}
-        {secondNumber}
-        {thirdNumber}
-        {fourthNumber}
-      </View>
+    setRow(++row);
+    setGuesses(
+      (guesses +=
+        "\n" +
+        firstNumber.toString() +
+        secondNumber.toString() +
+        thirdNumber.toString() +
+        fourthNumber.toString())
     );
+    setFirstNumber();
+    setSecondNumber();
+    setThirdNumber();
+    setFourthNumber();
+  };
+
+  const showGuesses = () => {
+    if (row >= 11) {
+      alert("Out of tries!");
+    }
+    if (row > 1) {
+      return (
+        <View>
+          <Text> Past Guesses:</Text>
+          <Text>{guesses}</Text>
+        </View>
+      );
+    }
   };
 
   const getNumber = async () => {
@@ -90,9 +102,7 @@ const GameScreen = () => {
         </View>
         <Button style={styles.button} title="Go" onPress={onClick} />
       </View>
-      {/* <View>
-        <Text>{firstNumber}</Text>
-      </View> */}
+      <View>{showGuesses()}</View>
     </View>
   );
 };
@@ -120,7 +130,5 @@ const styles = StyleSheet.create({
     paddingTop: 100,
     flexDirection: "row",
   },
-  guesses: {
-    paddingTop: 100,
-  },
+  guesses: {},
 });
