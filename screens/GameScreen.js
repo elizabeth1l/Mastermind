@@ -10,6 +10,15 @@ const GameScreen = () => {
   const [thirdNumber, setThirdNumber] = useState();
   const [fourthNumber, setFourthNumber] = useState();
   const [randomNumber, setRandomNumber] = useState();
+  let [rightNumbers, setRightNumbers] = useState(0);
+
+  useEffect(() => {
+    getNumber();
+  }, []);
+
+  useEffect(() => {
+    setRightNumbers(0);
+  }, []);
 
   const getNumber = async () => {
     try {
@@ -35,15 +44,49 @@ const GameScreen = () => {
   };
 
   const checkRightNumbers = () => {
-    let rightNumbers = 0;
-    randomNumber.includes(firstNumber) ? rightNumbers++ : rightNumbers;
-    randomNumber.includes(secondNumber) ? rightNumbers++ : rightNumbers;
-    randomNumber.includes(thirdNumber) ? rightNumbers++ : rightNumbers;
-    randomNumber.includes(fourthNumber) ? rightNumbers++ : rightNumbers;
-    console.log(rightNumbers);
+    //use dictionary to keep track of guesses
+    let guessDict = {};
+
+    addToDictionary(guessDict, firstNumber);
+    addToDictionary(guessDict, secondNumber);
+    addToDictionary(guessDict, thirdNumber);
+    addToDictionary(guessDict, fourthNumber);
+
+    let currentRightNumbers = 0;
+    // let randomNumberArray = createArrayFromResponse(randomNumber);
+    let randomNumberArray = Array.from(randomNumber);
+    randomNumberArray = randomNumberArray.filter((a) => a !== "\n");
+    console.log(randomNumberArray);
+    for (let eachNum of randomNumberArray) {
+      if (guessDict.hasOwnProperty(eachNum) && guessDict[eachNum] > 0) {
+        guessDict[eachNum]--;
+        currentRightNumbers++;
+      }
+    }
+    setRightNumbers(currentRightNumbers);
   };
 
+  const addToDictionary = (dict, val) => {
+    if (val in dict) {
+      dict[val]++;
+    } else {
+      dict[val] = 1;
+    }
+  };
+
+  //method to create an array of digits from random api response, parsing
+  const createArrayFromResponse = (response) => {
+    const len = response.length;
+    let arr = [];
+    for (let i = 0; i < len; i++) {
+      if (response[i] !== "\n") {
+        arr.push(response[i]);
+      }
+    }
+    return arr;
+  };
   const onClick = () => {
+    checkRightNumbers();
     setRow(++row);
     setGuesses(
       (guesses +=
@@ -60,7 +103,7 @@ const GameScreen = () => {
     setFourthNumber();
   };
 
-  const showGuesses = () => {
+  const showGuessesAndQty = () => {
     if (row >= 11) {
       alert("Out of tries!");
     }
@@ -75,16 +118,12 @@ const GameScreen = () => {
             <Text>Right Place </Text>
 
             <Text>Right Number</Text>
-            <Text>{checkRightNumbers()}</Text>
+            <Text>{rightNumbers}</Text>
           </View>
         </View>
       );
     }
   };
-
-  useEffect(() => {
-    getNumber();
-  }, []);
 
   return (
     <View>
@@ -122,7 +161,7 @@ const GameScreen = () => {
         <Button style={styles.button} title="Go" onPress={onClick} />
       </View>
 
-      <View>{showGuesses()}</View>
+      <View>{showGuessesAndQty()}</View>
     </View>
   );
 };
