@@ -43,48 +43,52 @@ const GameScreen = () => {
     }
   };
 
+  const addToDictionary = (dictionary, val) => {
+    if (val in dictionary) {
+      dictionary[val]++;
+    } else {
+      dictionary[val] = 1;
+    }
+  };
+
   const checkRightNumbers = () => {
     //use dictionary to keep track of guesses
-    let guessDict = {};
+    let guessDictionary = {};
 
-    addToDictionary(guessDict, firstNumber);
-    addToDictionary(guessDict, secondNumber);
-    addToDictionary(guessDict, thirdNumber);
-    addToDictionary(guessDict, fourthNumber);
+    addToDictionary(guessDictionary, firstNumber);
+    addToDictionary(guessDictionary, secondNumber);
+    addToDictionary(guessDictionary, thirdNumber);
+    addToDictionary(guessDictionary, fourthNumber);
 
     let currentRightNumbers = 0;
-    // let randomNumberArray = createArrayFromResponse(randomNumber);
+
     let randomNumberArray = Array.from(randomNumber);
+
+    //parse Random API response of new line entries
     randomNumberArray = randomNumberArray.filter((a) => a !== "\n");
     console.log(randomNumberArray);
-    for (let eachNum of randomNumberArray) {
-      if (guessDict.hasOwnProperty(eachNum) && guessDict[eachNum] > 0) {
-        guessDict[eachNum]--;
+    for (let i = 0; i < randomNumberArray.length; i++) {
+      if (
+        randomNumberArray[i] in guessDictionary &&
+        guessDictionary[randomNumberArray[i]] > 0
+      ) {
         currentRightNumbers++;
+        guessDictionary[i]--;
       }
     }
     setRightNumbers(currentRightNumbers);
   };
 
-  const addToDictionary = (dict, val) => {
-    if (val in dict) {
-      dict[val]++;
-    } else {
-      dict[val] = 1;
-    }
+  const checkRightPosition = () => {
+    /*
+    1. transform the guessed numbers into an array
+    2. transform the random numbers from random API response into array
+    3. with two arrays, compare each index
+    4. if two exact index matches, increment count of right position by 1
+    5. return right position
+    */
   };
 
-  //method to create an array of digits from random api response, parsing
-  const createArrayFromResponse = (response) => {
-    const len = response.length;
-    let arr = [];
-    for (let i = 0; i < len; i++) {
-      if (response[i] !== "\n") {
-        arr.push(response[i]);
-      }
-    }
-    return arr;
-  };
   const onClick = () => {
     checkRightNumbers();
     setRow(++row);
