@@ -9,15 +9,14 @@ const GameScreen = () => {
   const [secondNumber, setSecondNumber] = useState();
   const [thirdNumber, setThirdNumber] = useState();
   const [fourthNumber, setFourthNumber] = useState();
-  const [randomNumber, setRandomNumber] = useState();
+  const [randomNumberArray, setRandomNumberArray] = useState();
   let [rightNumbers, setRightNumbers] = useState(0);
+  let [rightNumbersString, setRightNumbersString] = useState("");
+  let [rightPositions, setRightPositions] = useState(0);
+  let [rightPositionsString, setRightPositionsString] = useState("");
 
   useEffect(() => {
     getNumber();
-  }, []);
-
-  useEffect(() => {
-    setRightNumbers(0);
   }, []);
 
   const getNumber = async () => {
@@ -27,8 +26,10 @@ const GameScreen = () => {
       ).then((response) => {
         return response.text();
       });
-      console.log(response);
-      setRandomNumber(response);
+      let randomNumberArray = Array.from(response);
+      randomNumberArray = randomNumberArray.filter((a) => a !== "\n");
+      setRandomNumberArray(randomNumberArray);
+      console.log(randomNumberArray);
     } catch (error) {
       console.error(error);
     }
@@ -52,7 +53,6 @@ const GameScreen = () => {
   };
 
   const checkRightNumbers = () => {
-    //use dictionary to keep track of guesses
     let guessDictionary = {};
 
     addToDictionary(guessDictionary, firstNumber);
@@ -62,10 +62,6 @@ const GameScreen = () => {
 
     let currentRightNumbers = 0;
 
-    let randomNumberArray = Array.from(randomNumber);
-
-    //parse Random API response of new line entries
-    randomNumberArray = randomNumberArray.filter((a) => a !== "\n");
     console.log(randomNumberArray);
     for (let i = 0; i < randomNumberArray.length; i++) {
       if (
@@ -73,24 +69,34 @@ const GameScreen = () => {
         guessDictionary[randomNumberArray[i]] > 0
       ) {
         currentRightNumbers++;
-        guessDictionary[i]--;
+        guessDictionary[randomNumberArray[i]]--;
       }
     }
     setRightNumbers(currentRightNumbers);
+    setRightNumbersString(
+      (rightNumbersString += "\n" + currentRightNumbers + "\n")
+    );
   };
 
-  const checkRightPosition = () => {
-    /*
-    1. transform the guessed numbers into an array
-    2. transform the random numbers from random API response into array
-    3. with two arrays, compare each index
-    4. if two exact index matches, increment count of right position by 1
-    5. return right position
-    */
+  const checkRightPositions = () => {
+    let currentRightPositions = 0;
+    let guessArray = [firstNumber, secondNumber, thirdNumber, fourthNumber];
+    // guessArray.push();
+    for (let i = 0; i < guessArray.length; i++) {
+      if (randomNumberArray[i] === guessArray[i]) {
+        currentRightPositions++;
+      }
+    }
+    console.log(currentRightPositions);
+    setRightPositions(currentRightPositions);
+    setRightPositionsString(
+      (rightPositionsString += "\n" + currentRightPositions + "\n")
+    );
   };
 
   const onClick = () => {
     checkRightNumbers();
+    checkRightPositions();
     setRow(++row);
     setGuesses(
       (guesses +=
@@ -101,6 +107,7 @@ const GameScreen = () => {
         fourthNumber.toString() +
         "\n")
     );
+
     setFirstNumber();
     setSecondNumber();
     setThirdNumber();
@@ -108,21 +115,23 @@ const GameScreen = () => {
   };
 
   const showGuessesAndQty = () => {
-    if (row >= 11) {
+    if (row > 10) {
       alert("Out of tries!");
     }
     if (row > 1) {
       return (
         <View style={styles.chart}>
-          <View style={styles.leftChart}>
+          <View style={styles.guesses}>
             <Text> Past Guesses</Text>
             <Text>{guesses}</Text>
           </View>
-          <View style={styles.rightChart}>
+          <View style={styles.positions}>
             <Text>Right Place </Text>
-
+            <Text>{rightPositionsString}</Text>
+          </View>
+          <View style={styles.numbers}>
             <Text>Right Number</Text>
-            <Text>{rightNumbers}</Text>
+            <Text>{rightNumbersString}</Text>
           </View>
         </View>
       );
@@ -201,13 +210,13 @@ const styles = StyleSheet.create({
     padding: 20,
     borderRadius: 10,
   },
-  leftChart: {
-    // flexDirection: "column",
+  guesses: {
     alignItems: "center",
-    // justifyContent: "center",
   },
-  rightChart: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+  positions: {
+    alignItems: "center",
+  },
+  numbers: {
+    alignItems: "center",
   },
 });
