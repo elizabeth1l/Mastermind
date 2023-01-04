@@ -1,8 +1,16 @@
-import { get } from "firebase/database";
 import react, { useState, useEffect } from "react";
-import { Text, View, TextInput, StyleSheet, Button } from "react-native";
+import {
+  Text,
+  View,
+  TextInput,
+  Modal,
+  StyleSheet,
+  Button,
+  Pressable,
+} from "react-native";
 
 const GameScreen = () => {
+  const [modalVisible, setModalVisible] = useState(false);
   let [row, setRow] = useState(1);
   let [guesses, setGuesses] = useState("");
   const [firstNumber, setFirstNumber] = useState();
@@ -87,8 +95,12 @@ const GameScreen = () => {
         currentRightPositions++;
       }
     }
-    console.log(currentRightPositions);
     setRightPositions(currentRightPositions);
+
+    if (currentRightPositions === 4) {
+      showModal();
+    }
+
     setRightPositionsString(
       (rightPositionsString += "\n" + currentRightPositions + "\n")
     );
@@ -107,7 +119,6 @@ const GameScreen = () => {
         fourthNumber.toString() +
         "\n")
     );
-
     setFirstNumber();
     setSecondNumber();
     setThirdNumber();
@@ -136,6 +147,10 @@ const GameScreen = () => {
         </View>
       );
     }
+  };
+
+  const showModal = () => {
+    setModalVisible(true);
   };
 
   return (
@@ -173,8 +188,31 @@ const GameScreen = () => {
         </View>
         <Button style={styles.button} title="Go" onPress={onClick} />
       </View>
-
       <View>{showGuessesAndQty()}</View>
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          Alert.alert("Modal has been closed.");
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}>You win!</Text>
+            <Button
+              onPress={() => setModalVisible(!modalVisible)}
+              title={"Close"}
+            />
+            <Button
+              onPress={() => setModalVisible(!modalVisible)}
+              title={"Play Again"}
+            />
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -218,5 +256,29 @@ const styles = StyleSheet.create({
   },
   numbers: {
     alignItems: "center",
+  },
+  modalView: {
+    backgroundColor: "white",
+    borderRadius: 20,
+    paddingHorizontal: 60,
+    paddingVertical: 40,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center",
   },
 });
