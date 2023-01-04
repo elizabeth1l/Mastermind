@@ -6,12 +6,12 @@ import {
   Modal,
   StyleSheet,
   Button,
-  Pressable,
+  TouchableOpacity,
 } from "react-native";
 
 const GameScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
-  let [row, setRow] = useState(1);
+  let [tries, setTries] = useState(1);
   let [guesses, setGuesses] = useState("");
   const [firstNumber, setFirstNumber] = useState();
   const [secondNumber, setSecondNumber] = useState();
@@ -109,7 +109,7 @@ const GameScreen = () => {
   const onClick = () => {
     checkRightNumbers();
     checkRightPositions();
-    setRow(++row);
+    setTries(++tries);
     setGuesses(
       (guesses +=
         "\n" +
@@ -126,10 +126,10 @@ const GameScreen = () => {
   };
 
   const showGuessesAndQty = () => {
-    if (row > 10) {
+    if (tries > 10) {
       alert("Out of tries!");
     }
-    if (row > 1) {
+    if (tries > 1) {
       return (
         <View style={styles.chart}>
           <View style={styles.guesses}>
@@ -188,7 +188,18 @@ const GameScreen = () => {
         </View>
         <Button style={styles.button} title="Go" onPress={onClick} />
       </View>
+      <View style={styles.countdown}>
+        <Text>Tries Remaining: {11 - tries} </Text>
+      </View>
       <View>{showGuessesAndQty()}</View>
+      <View style={styles.buttons}>
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.buttonText}>Restart</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.buttonText}>Hint</Text>
+        </TouchableOpacity>
+      </View>
 
       <Modal
         animationType="slide"
@@ -280,5 +291,27 @@ const styles = StyleSheet.create({
   modalText: {
     marginBottom: 15,
     textAlign: "center",
+  },
+  countdown: {
+    marginHorizontal: 35,
+    paddingTop: 15,
+  },
+  buttons: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    padding: 25,
+  },
+  button: {
+    backgroundColor: "#6EB0AE",
+    width: 100,
+    height: 50,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 8,
+  },
+  buttonText: {
+    color: "white",
+    fontSize: 15,
+    fontWeight: "500",
   },
 });
