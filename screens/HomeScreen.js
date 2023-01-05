@@ -32,7 +32,6 @@ const HomeScreen = (props) => {
 
   return (
     <View>
-      <Text>Hello</Text>
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.button} onPress={handleSignOut}>
           <Text style={styles.buttonText}>Sign out</Text>

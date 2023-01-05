@@ -7,6 +7,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import HomeScreen from "./screens/HomeScreen";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import GameScreen from "./screens/GameScreen";
+import InfoScreen from "./screens/InfoScreen";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -39,15 +40,15 @@ const TabNavigator = ({ route }) => (
         ),
       }}
     />
-    {/* <Tab.Screen
-      name="Translator"
-      // component={TranslatorScreen}
+    <Tab.Screen
+      name="InfoSceen"
+      component={InfoScreen}
       options={{
         tabBarIcon: () => (
-          <MaterialCommunityIcons name="camera" color="#5A4AE3" size={30} />
+          <MaterialCommunityIcons name="information" color="#6EB0AE" size={30} />
         ),
       }}
-    /> */}
+    />
   </Tab.Navigator>
 );
 
