@@ -98,7 +98,7 @@ const GameScreen = () => {
     setRightPositions(currentRightPositions);
 
     if (currentRightPositions === 4) {
-      showModal();
+      setModalVisible(true);
     }
 
     setRightPositionsString(
@@ -106,7 +106,7 @@ const GameScreen = () => {
     );
   };
 
-  const onClick = () => {
+  const goOnPress = () => {
     checkRightNumbers();
     checkRightPositions();
     setTries(++tries);
@@ -123,6 +123,20 @@ const GameScreen = () => {
     setSecondNumber();
     setThirdNumber();
     setFourthNumber();
+  };
+
+  const restartOnPress = () => {
+    getNumber();
+    setFirstNumber();
+    setSecondNumber();
+    setThirdNumber();
+    setFourthNumber();
+    setTries(1);
+    setRightNumbers(0);
+    setRightPositions(0);
+    setRightPositionsString("");
+    setRightNumbersString("");
+    setGuesses("");
   };
 
   const showGuessesAndQty = () => {
@@ -147,10 +161,6 @@ const GameScreen = () => {
         </View>
       );
     }
-  };
-
-  const showModal = () => {
-    setModalVisible(true);
   };
 
   return (
@@ -186,14 +196,14 @@ const GameScreen = () => {
             value={fourthNumber}
           />
         </View>
-        <Button style={styles.button} title="Go" onPress={onClick} />
+        <Button style={styles.button} title="Go" onPress={goOnPress} />
       </View>
       <View style={styles.countdown}>
         <Text>Tries Remaining: {11 - tries} </Text>
       </View>
       <View>{showGuessesAndQty()}</View>
       <View style={styles.buttons}>
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button} onPress={restartOnPress}>
           <Text style={styles.buttonText}>Restart</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button}>
