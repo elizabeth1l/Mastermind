@@ -12,6 +12,7 @@ import {
 const GameScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
   let [tries, setTries] = useState(1);
+  let [points, setPoints] = useState(0);
   let [guesses, setGuesses] = useState("");
   const [firstNumber, setFirstNumber] = useState();
   const [secondNumber, setSecondNumber] = useState();
@@ -98,6 +99,7 @@ const GameScreen = () => {
     setRightPositions(currentRightPositions);
 
     if (currentRightPositions === 4) {
+      setPoints(100 - tries * 10);
       setModalVisible(true);
     }
 
@@ -222,7 +224,7 @@ const GameScreen = () => {
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text style={styles.modalText}>You win!</Text>
+            <Text style={styles.modalText}>You win {points} points!</Text>
             <Button
               onPress={() => setModalVisible(!modalVisible)}
               title={"Close"}
