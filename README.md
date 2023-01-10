@@ -37,3 +37,8 @@ export const auth = getAuth(app);
 ```
 
 After creating this file, you can start editing or run in your terminal `npm start`. You may download EXPO Go app on your iPhone and scan the QR code to run the app on your phone, or press 'i' to open the iOS simulator through Xcode.
+
+## How to Play
+
+1. Sign up, or log in if you have previously registered with an email and password.
+2. Navigate using the bottom tabs. To start the game, clik on the tab labeled 'play'.

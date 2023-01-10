@@ -28,7 +28,7 @@ const TabNavigator = ({ route }) => (
       }}
     />
     <Tab.Screen
-      name="GameScreen"
+      name="Play"
       children={() => <GameScreen username={route.params.username} />}
       options={{
         tabBarIcon: () => (
@@ -41,7 +41,7 @@ const TabNavigator = ({ route }) => (
       }}
     />
     <Tab.Screen
-      name="InfoSceen"
+      name="Info"
       component={InfoScreen}
       options={{
         tabBarIcon: () => (
