@@ -1,9 +1,9 @@
 ## Mastermind
 
 <div style = 'display:flex'>
-<img src= 'https://github.com/elizabeth1l/Mastermind/blob/main/images/login.png'>
-<img src = 'https://github.com/elizabeth1l/Mastermind/images/home.png'>
-<img src = 'https://github.com/elizabeth1l/Mastermind/images/game.png'>
+<img src= 'https://github.com/elizabeth1l/Mastermind/blob/main/images/login.png' width="250">
+<img src = 'https://github.com/elizabeth1l/Mastermind/blob/main/images/home.png' width="250">
+<img src = 'https://github.com/elizabeth1l/Mastermind/blob/main/images/game.png' width="250">
 
 ## About
 
