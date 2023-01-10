@@ -48,7 +48,7 @@ const TabNavigator = ({ route }) => (
           <MaterialCommunityIcons
             name="information"
             color="#6EB0AE"
-            size={30}
+            size={28}
           />
         ),
       }}

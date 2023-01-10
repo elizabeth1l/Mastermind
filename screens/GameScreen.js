@@ -10,9 +10,11 @@ import {
 } from "react-native";
 import { db } from "../firebase";
 import { ref, onValue, update } from "firebase/database";
+import { FA5Style } from "@expo/vector-icons/build/FontAwesome5";
 
 const GameScreen = (props) => {
   const [modalVisible, setModalVisible] = useState(false);
+  const [hintModalVisible, setHintModalVisible] = useState(FA5Style);
   let [tries, setTries] = useState(1);
   let [points, setPoints] = useState(0);
   let [guesses, setGuesses] = useState("");
@@ -21,9 +23,8 @@ const GameScreen = (props) => {
   const [thirdNumber, setThirdNumber] = useState();
   const [fourthNumber, setFourthNumber] = useState();
   const [randomNumberArray, setRandomNumberArray] = useState();
-  let [rightNumbers, setRightNumbers] = useState(0);
+  let [randomHint, setRandomHint] = useState();
   let [rightNumbersString, setRightNumbersString] = useState("");
-  let [rightPositions, setRightPositions] = useState(0);
   let [rightPositionsString, setRightPositionsString] = useState("");
 
   useEffect(() => {
@@ -83,7 +84,6 @@ const GameScreen = (props) => {
         guessDictionary[randomNumberArray[i]]--;
       }
     }
-    setRightNumbers(currentRightNumbers);
     setRightNumbersString(
       (rightNumbersString += "\n" + currentRightNumbers + "\n")
     );
@@ -92,13 +92,11 @@ const GameScreen = (props) => {
   const checkRightPositions = () => {
     let currentRightPositions = 0;
     let guessArray = [firstNumber, secondNumber, thirdNumber, fourthNumber];
-    // guessArray.push();
     for (let i = 0; i < guessArray.length; i++) {
       if (randomNumberArray[i] === guessArray[i]) {
         currentRightPositions++;
       }
     }
-    setRightPositions(currentRightPositions);
 
     if (currentRightPositions === 4) {
       setPoints(100 - tries * 10);
@@ -136,11 +134,16 @@ const GameScreen = (props) => {
     setThirdNumber();
     setFourthNumber();
     setTries(1);
-    setRightNumbers(0);
-    setRightPositions(0);
     setRightPositionsString("");
     setRightNumbersString("");
     setGuesses("");
+  };
+
+  const hintOnPress = (array) => {
+    let randomIndex = Math.floor(Math.random() * array.length);
+    console.log(array[randomIndex]);
+    setRandomHint(array[randomIndex]);
+    setHintModalVisible(true);
   };
 
   const updatePoints = () => {
@@ -223,7 +226,10 @@ const GameScreen = (props) => {
         <TouchableOpacity style={styles.button} onPress={restartOnPress}>
           <Text style={styles.buttonText}>Restart</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => hintOnPress(randomNumberArray)}
+        >
           <Text style={styles.buttonText}>Hint</Text>
         </TouchableOpacity>
       </View>
@@ -244,6 +250,31 @@ const GameScreen = (props) => {
               onPress={() => {
                 setModalVisible(!modalVisible);
                 updatePoints();
+              }}
+              title={"Close"}
+            />
+          </View>
+        </View>
+      </Modal>
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={hintModalVisible}
+        onRequestClose={() => {
+          Alert.alert("Modal has been closed.");
+          setHintModalVisible(!hintModalVisible);
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}>
+              I can't tell you how many or where... but there is a {randomHint}{" "}
+              somewhere
+            </Text>
+            <Button
+              onPress={() => {
+                setHintModalVisible(!hintModalVisible);
               }}
               title={"Close"}
             />
