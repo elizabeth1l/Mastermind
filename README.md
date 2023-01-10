@@ -36,7 +36,7 @@ export const db = getDatabase(app);
 export const auth = getAuth(app);
 ```
 
-After creating this file, you can start editing or run in your terminal `npm start`. You may download EXPO Go app on your iPhone and scan the QR code to run the app on your phone, or press 'i' to open the iOS simulator through Xcode.
+After creating this file, you can start editing or run in your terminal `npm start`. You may download Expo Go app through the App Store on your iPhone and scan the QR code to run the app on your phone, or type 'i' to open the iOS simulator through Xcode.
 
 ## How to Play
 
@@ -44,4 +44,4 @@ After creating this file, you can start editing or run in your terminal `npm sta
 2. Navigate using the bottom tabs. To start the game, click on the tab labeled 'Play'.
 3. In the input boxes, type numbers ranging from 0-7. If an alphabetical character or number greater than 7 is typed, an error will appear on the device and you will be prompted to re-enter a number. Click on 'Go' once all four input boxes are filled. You can use the countdown to keep track of how many tries you have left.
 4. If you're in a need of a hint, feel free to hit the "Hint" button at anytime. The game will return a random number that exists among the four-digit number. You will not know how many or where the position of the number lies, only that there is at least one somewhere in the four-digit number.
-5. Each time a guess is made, the total number of points you can win reduces by 10. Once you've guessed the correct four-digit number, an alert will appear on the device notifying you how many points you have been awarded. Close out of the alert and head to your home page to see your new total. If you would like to play again, head back to the 'Play' screen and hit 'Restart'.
+5. Each time a guess is made, the total number of points you can win reduces by 10. Once you've guessed the correct four-digit number, an alert will appear on the device notifying you how many points you have been awarded. Close out of the alert and head to your home page to see your new total. If you would like to play again, return to the 'Play' screen and hit 'Restart'.
