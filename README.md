@@ -21,18 +21,19 @@ import { getAnalytics } from "firebase/analytics";
 import { getAuth } from "firebase/auth";
 import { getDatabase } from "firebase/database";
 
-const config = {
-  FIREBASE_API_KEY: "[FIREBASE INFO HERE]",
-  FIREBASE_AUTH_DOMAIN: "[FIREBASE INFO HERE]",
-  FIREBASE_PROJECT_ID: "[FIREBASE INFO HERE]",
-  FIREBASE_STORAGE_BUCKET: "[FIREBASE INFO HERE]",
-  FIREBASE_MESSAGING_SENDER_ID: "[FIREBASE INFO HERE]",
-  FIREBASE_APP_ID: "[FIREBASE INFO HERE]",
-  FIREBASE_MEASUREMENT_ID: "[FIREBASE INFO HERE]"
+const firebaseConfig = {
+  apiKey: "[FIREBASE INFO HERE]",
+  authDomain: "[FIREBASE INFO HERE]",
+  projectId: "[FIREBASE INFO HERE]",
+  storageBucket: "[FIREBASE INFO HERE]",
+  messagingSenderId: "[FIREBASE INFO HERE]",
+  appId: "[FIREBASE INFO HERE]",
+  measurementId: "[FIREBASE INFO HERE]",
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 export const db = getDatabase(app);
 export const auth = getAuth(app);
 ```
+
+After creating this file, you can start editing or run in your terminal `npm start`. You may download EXPO Go app on your iPhone and scan the QR code to run the app on your phone, or press 'i' to open the iOS simulator through Xcode.
