@@ -1,7 +1,7 @@
 ## Mastermind
 
 <div style = 'display:flex'>
-<img src= 'https://github.com/elizabeth1l/Mastermind/images/login.png'>
+<img src= 'https://github.com/elizabeth1l/Mastermind/blob/main/images/login.png'>
 <img src = 'https://github.com/elizabeth1l/Mastermind/images/home.png'>
 <img src = 'https://github.com/elizabeth1l/Mastermind/images/game.png'>
 
