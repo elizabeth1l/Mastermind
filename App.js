@@ -29,7 +29,7 @@ const TabNavigator = ({ route }) => (
     />
     <Tab.Screen
       name="GameScreen"
-      component={GameScreen}
+      children={() => <GameScreen username={route.params.username} />}
       options={{
         tabBarIcon: () => (
           <MaterialCommunityIcons
@@ -45,7 +45,11 @@ const TabNavigator = ({ route }) => (
       component={InfoScreen}
       options={{
         tabBarIcon: () => (
-          <MaterialCommunityIcons name="information" color="#6EB0AE" size={30} />
+          <MaterialCommunityIcons
+            name="information"
+            color="#6EB0AE"
+            size={30}
+          />
         ),
       }}
     />
