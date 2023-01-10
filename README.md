@@ -2,7 +2,7 @@
 
 ## About
 
-Mastermind is a game where a player tries to guess the number combination created by the computer. At the end of each attempt at guessing the 4 number combination, the computer will provide feedback whether the player had guessed a number correctly, or/and the location of a number correctly. The player must guess the right number combinations within 10 attempts to win the game.
+Mastermind is a game where a player tries to guess the four-digit combination created by the computer. At the end of each attempt at guessing the four-digit combination, the computer will provide feedback whether the player had guessed a number correctly, or/and the location of a number correctly. The player must guess the right number combinations within 10 attempts to win the game.
 
 ## Getting Started
 
