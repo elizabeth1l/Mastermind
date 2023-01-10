@@ -6,7 +6,7 @@ Mastermind is a game where a player tries to guess the four-digit combination cr
 
 ## Getting Started
 
-# Prerequisites
+**Prerequisites**
 
 - Please have <a href="https://apps.apple.com/us/app/xcode/id497799835?mt=12">Xcode</a> downloaded to experience Mastermind on an iOS simulator or use Expo Go to view directly on mobile.
 
@@ -15,6 +15,8 @@ Mastermind is a game where a player tries to guess the four-digit combination cr
 ```
 npm install npm@latest -g
 ```
+
+**Installation**
 
 ```
 git clone git@github.com:elizabeth1l/Mastermind.git
