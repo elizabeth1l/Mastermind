@@ -68,10 +68,9 @@ const LoginScreen = () => {
     <KeyboardAvoidingView style={styles.container} behavior="padding">
       <Image
         style={styles.image}
-        source={require("../Mastermind-1.png")}
+        source={require("../images/Mastermind-1.png")}
       ></Image>
       <View style={styles.inputContainer}>
-        {/* <Image style={styles.image} source={require("../Image2Speech-1.png")} /> */}
         <TextInput
           placeholder="Email"
           value={email}

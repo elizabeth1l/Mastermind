@@ -1,5 +1,8 @@
 ## Mastermind
 
+<div style = 'display:flex'>
+<img src= 'https://github.com/elizabeth1l/images/login.png'>
+
 ## About
 
 Mastermind is a game where a player tries to guess the four-digit combination created by the computer. At the end of each attempt at guessing the four-digit combination, the computer will provide feedback whether the player had guessed a number correctly, or/and the location of a number correctly. The player must guess the right number combinations within 10 attempts to win the game.
@@ -8,9 +11,9 @@ Mastermind is a game where a player tries to guess the four-digit combination cr
 
 **Prerequisites**
 
-- Please have <a href="https://apps.apple.com/us/app/xcode/id497799835?mt=12">Xcode</a> downloaded to experience Mastermind on an iOS simulator or use Expo Go to view directly on mobile.
+- Please have <a href="https://apps.apple.com/us/app/xcode/id497799835?mt=12">Xcode</a> downloaded to experience Mastermind on an iOS simulator or download Expo Go through the App Store to view directly on mobile.
 
-- Please have npm installed
+- Please have npm installed.
 
 ```
 npm install npm@latest -g
