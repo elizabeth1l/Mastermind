@@ -66,6 +66,10 @@ const LoginScreen = () => {
 
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
+      <Image
+        style={styles.image}
+        source={require("../Mastermind-1.png")}
+      ></Image>
       <View style={styles.inputContainer}>
         {/* <Image style={styles.image} source={require("../Image2Speech-1.png")} /> */}
         <TextInput
@@ -102,9 +106,9 @@ export default LoginScreen;
 
 const styles = StyleSheet.create({
   image: {
-    width: 300,
-    height: 300,
-    top: 20,
+    width: 400,
+    height: 400,
+    top: 80,
   },
   container: {
     flex: 2,
@@ -112,7 +116,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#EFEFEF",
   },
   inputContainer: {
-    top: 100,
+    top: 50,
     width: "80%",
     alignItems: "center",
   },
@@ -128,7 +132,6 @@ const styles = StyleSheet.create({
     width: "60%",
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 40,
     top: 100,
   },
   button: {
