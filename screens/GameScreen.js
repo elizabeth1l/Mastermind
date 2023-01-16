@@ -10,11 +10,10 @@ import {
 } from "react-native";
 import { db } from "../firebase";
 import { ref, onValue, update } from "firebase/database";
-import { FA5Style } from "@expo/vector-icons/build/FontAwesome5";
 
 const GameScreen = (props) => {
   const [modalVisible, setModalVisible] = useState(false);
-  const [hintModalVisible, setHintModalVisible] = useState(FA5Style);
+  const [hintModalVisible, setHintModalVisible] = useState(false);
   let [tries, setTries] = useState(1);
   let [points, setPoints] = useState(0);
   let [guesses, setGuesses] = useState("");
@@ -26,10 +25,15 @@ const GameScreen = (props) => {
   let [randomHint, setRandomHint] = useState();
   let [rightNumbersString, setRightNumbersString] = useState("");
   let [rightPositionsString, setRightPositionsString] = useState("");
+  let [errorToggle, setErrorToggle] = useState(false);
 
   useEffect(() => {
     getNumber();
   }, []);
+
+  // useEffect(() => {
+  //   alert("Num must be between 0 and 7");
+  // }, []);
 
   const getNumber = async () => {
     try {
@@ -48,12 +52,27 @@ const GameScreen = (props) => {
   };
 
   const onChangeLimit = (num, func) => {
+    setErrorToggle(false);
     if (num < 8) {
       func(num);
     } else {
-      alert("Invalid input, please enter a number between 0 and 7");
-      func("");
+      setErrorToggle(true);
+      displayError(num);
+      console.log(num);
     }
+  };
+
+  const displayError = (num) => {
+    console.log(num);
+    return errorToggle === true ? (
+      <View>
+        <Text>Error: {num} is not beteen 0 and 7</Text>
+      </View>
+    ) : (
+      <View>
+        <Text>OK</Text>
+      </View>
+    );
   };
 
   const checkRightNumbers = () => {
@@ -152,9 +171,7 @@ const GameScreen = (props) => {
     onValue(totalPointsFromDBRef, (snapshot) => {
       totalPoints = snapshot.val();
     });
-    console.log("totalPoints", totalPoints);
     const updates = {};
-    console.log("points:", points);
     updates["users/" + props.username + "/points"] = totalPoints += points;
     return update(ref(db), updates);
   };
@@ -219,6 +236,7 @@ const GameScreen = (props) => {
         <Button style={styles.button} title="Go" onPress={goOnPress} />
       </View>
       <View style={styles.countdown}>
+        <View>{displayError()}</View>
         <Text>Tries Remaining: {11 - tries} </Text>
       </View>
       <View>{showGuessesAndQty()}</View>
