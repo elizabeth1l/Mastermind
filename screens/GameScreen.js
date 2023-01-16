@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { db } from "../firebase";
 import { ref, onValue, update } from "firebase/database";
+import { SelectList } from "react-native-dropdown-select-list";
 
 const GameScreen = (props) => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -17,28 +18,18 @@ const GameScreen = (props) => {
   let [tries, setTries] = useState(1);
   let [points, setPoints] = useState(0);
   let [guesses, setGuesses] = useState("");
-  const [firstNumber, setFirstNumber] = useState();
-  const [secondNumber, setSecondNumber] = useState();
-  const [thirdNumber, setThirdNumber] = useState();
-  const [fourthNumber, setFourthNumber] = useState();
   const [randomNumberArray, setRandomNumberArray] = useState();
   let [randomHint, setRandomHint] = useState();
   let [rightNumbersString, setRightNumbersString] = useState("");
   let [rightPositionsString, setRightPositionsString] = useState("");
-  let [errorToggle, setErrorToggle] = useState(false);
-
-  useEffect(() => {
-    getNumber();
-  }, []);
-
-  // useEffect(() => {
-  //   alert("Num must be between 0 and 7");
-  // }, []);
+  let [selectedDifficulty, setSelectedDifficulty] = useState("");
+  let [length, setLength] = useState(0);
+  let [inputArray, setInputArray] = useState([]);
 
   const getNumber = async () => {
     try {
       const response = await fetch(
-        "https://www.random.org/integers/?num=4&min=0&max=7&col=1&base=10&format=plain&rnd=new"
+        `https://www.random.org/integers/?num=${length}&min=0&max=7&col=1&base=10&format=plain&rnd=new`
       ).then((response) => {
         return response.text();
       });
@@ -51,29 +42,14 @@ const GameScreen = (props) => {
     }
   };
 
-  const onChangeLimit = (num, func) => {
-    setErrorToggle(false);
-    if (num < 8) {
-      func(num);
-    } else {
-      setErrorToggle(true);
-      displayError(num);
-      console.log(num);
-    }
-  };
-
-  const displayError = (num) => {
-    console.log(num);
-    return errorToggle === true ? (
-      <View>
-        <Text>Error: {num} is not beteen 0 and 7</Text>
-      </View>
-    ) : (
-      <View>
-        <Text>OK</Text>
-      </View>
-    );
-  };
+  // const onChangeLimit = (num, func) => {
+  //   if (num < 8) {
+  //     func(num);
+  //   } else {
+  //     alert("Invalid input, please enter a number between 0 and 7");
+  //     func("");
+  //   }
+  // };
 
   const checkRightNumbers = () => {
     const addToDictionary = (dictionary, val) => {
@@ -86,10 +62,9 @@ const GameScreen = (props) => {
 
     let guessDictionary = {};
 
-    addToDictionary(guessDictionary, firstNumber);
-    addToDictionary(guessDictionary, secondNumber);
-    addToDictionary(guessDictionary, thirdNumber);
-    addToDictionary(guessDictionary, fourthNumber);
+    for (let i = 0; i < inputArray.length; i++) {
+      addToDictionary(guessDictionary, inputArray[i]);
+    }
 
     let currentRightNumbers = 0;
 
@@ -110,14 +85,14 @@ const GameScreen = (props) => {
 
   const checkRightPositions = () => {
     let currentRightPositions = 0;
-    let guessArray = [firstNumber, secondNumber, thirdNumber, fourthNumber];
-    for (let i = 0; i < guessArray.length; i++) {
-      if (randomNumberArray[i] === guessArray[i]) {
+    // let guessArray = [firstNumber, secondNumber, thirdNumber, fourthNumber];
+    for (let i = 0; i < inputArray.length; i++) {
+      if (randomNumberArray[i] === inputArray[i]) {
         currentRightPositions++;
       }
     }
 
-    if (currentRightPositions === 4) {
+    if (currentRightPositions === length) {
       setPoints(100 - tries * 10);
       setModalVisible(true);
     }
@@ -128,34 +103,21 @@ const GameScreen = (props) => {
   };
 
   const goOnPress = () => {
+    console.log(inputArray);
     checkRightNumbers();
     checkRightPositions();
     setTries(++tries);
-    setGuesses(
-      (guesses +=
-        "\n" +
-        firstNumber.toString() +
-        secondNumber.toString() +
-        thirdNumber.toString() +
-        fourthNumber.toString() +
-        "\n")
-    );
-    setFirstNumber();
-    setSecondNumber();
-    setThirdNumber();
-    setFourthNumber();
+    setGuesses((guesses += "\n" + inputArray.join("") + "\n"));
+    setInputArray([]);
   };
 
   const restartOnPress = () => {
     getNumber();
-    setFirstNumber();
-    setSecondNumber();
-    setThirdNumber();
-    setFourthNumber();
     setTries(1);
     setRightPositionsString("");
     setRightNumbersString("");
     setGuesses("");
+    setInputArray([]);
   };
 
   const hintOnPress = (array) => {
@@ -171,7 +133,9 @@ const GameScreen = (props) => {
     onValue(totalPointsFromDBRef, (snapshot) => {
       totalPoints = snapshot.val();
     });
+    console.log("totalPoints", totalPoints);
     const updates = {};
+    console.log("points:", points);
     updates["users/" + props.username + "/points"] = totalPoints += points;
     return update(ref(db), updates);
   };
@@ -200,43 +164,66 @@ const GameScreen = (props) => {
     }
   };
 
-  return (
-    <View>
-      <View style={styles.row}>
-        <View style={styles.oneAttemptRow}>
+  const data = [
+    { key: "1", value: "easy" },
+    { key: "2", value: "medium" },
+    { key: "3", value: "hard" },
+  ];
+
+  const setLengthOfRow = (val) => {
+    if (val === "easy") {
+      setLength(3);
+    } else if (val === "medium") {
+      setLength(4);
+    } else {
+      setLength(5);
+    }
+  };
+
+  useEffect(() => {
+    getNumber();
+  }, [length]);
+
+  const oneAttemptRow = () => {
+    const arrayFromLength = Array.from({ length: length }, (_, index) => {
+      return (
+        <View>
           <TextInput
             style={styles.input}
             keyboardType="numeric"
             maxLength={1}
-            onChangeText={(num) => onChangeLimit(num, setFirstNumber)}
-            value={firstNumber}
-          />
-          <TextInput
-            style={styles.input}
-            keyboardType="numeric"
-            maxLength={1}
-            onChangeText={(num) => onChangeLimit(num, setSecondNumber)}
-            value={secondNumber}
-          />
-          <TextInput
-            style={styles.input}
-            keyboardType="numeric"
-            maxLength={1}
-            onChangeText={(num) => onChangeLimit(num, setThirdNumber)}
-            value={thirdNumber}
-          />
-          <TextInput
-            style={styles.input}
-            keyboardType="numeric"
-            maxLength={1}
-            onChangeText={(num) => onChangeLimit(num, setFourthNumber)}
-            value={fourthNumber}
+            onChangeText={(num) => {
+              if (num > 7) {
+                alert("Invalid input, please enter a number between 0 and 7");
+                num = "";
+              }
+              let inputArrayCopy = [...inputArray];
+              inputArrayCopy[index] = num;
+              setInputArray(inputArrayCopy);
+            }}
+            value={inputArray[index]}
           />
         </View>
+      );
+    });
+    return arrayFromLength;
+  };
+
+  return (
+    <View>
+      <View style={styles.dropdown}>
+        <SelectList
+          setSelected={(val) => setLengthOfRow(val)}
+          data={data}
+          save="value"
+        />
+      </View>
+
+      <View style={styles.row}>
+        <View style={styles.oneAttemptRow}>{oneAttemptRow()}</View>
         <Button style={styles.button} title="Go" onPress={goOnPress} />
       </View>
       <View style={styles.countdown}>
-        <View>{displayError()}</View>
         <Text>Tries Remaining: {11 - tries} </Text>
       </View>
       <View>{showGuessesAndQty()}</View>
@@ -317,13 +304,12 @@ const styles = StyleSheet.create({
     borderColor: "#6EB0AE",
   },
   oneAttemptRow: {
-    // paddingTop: 40,
     flexDirection: "row",
   },
   row: {
     alignSelf: "center",
     alignItems: "center",
-    paddingTop: 100,
+    paddingTop: 10,
     flexDirection: "row",
   },
   chart: {
@@ -388,5 +374,10 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 15,
     fontWeight: "500",
+  },
+  dropdown: {
+    paddingTop: 80,
+    width: 100,
+    alignSelf: "center",
   },
 });
