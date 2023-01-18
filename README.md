@@ -1,9 +1,9 @@
 ## Mastermind
 
 <div style = 'display:flex'>
-<img src= 'https://github.com/elizabeth1l/Mastermind/blob/main/images/login.png' width="250" height ='400'>
-<img src = 'https://github.com/elizabeth1l/Mastermind/blob/main/images/home.png' width="250" height ='400'>
-<img src = 'https://github.com/elizabeth1l/Mastermind/blob/main/images/game2.png' width="250" height ='400'>
+<img src= 'https://github.com/elizabeth1l/Mastermind/blob/main/images/login.png' width="250" height ='600'>
+<img src = 'https://github.com/elizabeth1l/Mastermind/blob/main/images/home.png' width="250" height ='600'>
+<img src = 'https://github.com/elizabeth1l/Mastermind/blob/main/images/game2.png' width="250" height ='600'>
 
 ## About
 
